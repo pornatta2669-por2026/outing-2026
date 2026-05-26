@@ -677,13 +677,13 @@ footer{
       <div class="step active" id="step1">
         <div class="form-group">
           <label class="field-label">ชื่อจริง (TH) <span style="color:#c44">*</span></label>
-          <input type="text" id="fname" placeholder="เช่น สมชาย" required/>
+          <input type="text" id="fname" placeholder="เช่น สมชาย" autocomplete="off"/>
         </div>
         <div class="form-group">
           <label class="field-label">นามสกุล (TH) <span style="color:#c44">*</span></label>
-          <input type="text" id="lname" placeholder="เช่น ใจดี" required/>
+          <input type="text" id="lname" placeholder="เช่น ใจดี" autocomplete="off"/>
         </div>
-        <button class="btn-next" onclick="goStep(2)">ถัดไป →</button>
+        <button type="button" class="btn-next" onclick="goStep(2)">ถัดไป →</button>
       </div>
 
       <!-- STEP 2: แฟน -->
@@ -705,8 +705,8 @@ footer{
             <input type="text" id="plname" placeholder="เช่น รักดี"/>
           </div>
         </div>
-        <button class="btn-next" onclick="goStep(3)">ถัดไป →</button>
-        <button class="btn-back" onclick="goStep(1)">← ย้อนกลับ</button>
+        <button type="button" class="btn-next" onclick="goStep(3)">ถัดไป →</button>
+        <button type="button" class="btn-back" onclick="goStep(1)">← ย้อนกลับ</button>
       </div>
 
       <!-- STEP 3: กิจกรรมกลางวัน -->
@@ -718,8 +718,8 @@ footer{
             <div class="tog"><input type="radio" name="activity" id="aNo" value="no"/><label for="aNo"><span class="t-icon">🌙</span>ไม่เข้าร่วมรอเจอคืนนี้จ้า</label></div>
           </div>
         </div>
-        <button class="btn-next" onclick="goStep(4)">ถัดไป →</button>
-        <button class="btn-back" onclick="goStep(2)">← ย้อนกลับ</button>
+        <button type="button" class="btn-next" onclick="goStep(4)">ถัดไป →</button>
+        <button type="button" class="btn-back" onclick="goStep(2)">← ย้อนกลับ</button>
       </div>
 
       <!-- STEP 4: โรงแรม -->
@@ -731,8 +731,8 @@ footer{
             <div class="tog"><input type="radio" name="hotel" id="hNo" value="no"/><label for="hNo"><span class="t-icon">🏠</span>บ้าน</label></div>
           </div>
         </div>
-        <button class="btn-submit" onclick="submitForm()">✦ ยืนยันการลงทะเบียน</button>
-        <button class="btn-back" onclick="goStep(3)">← ย้อนกลับ</button>
+        <button type="button" class="btn-submit" onclick="submitForm()">✦ ยืนยันการลงทะเบียน</button>
+        <button type="button" class="btn-back" onclick="goStep(3)">← ย้อนกลับ</button>
         <div class="success" id="successMsg">
           <div class="success-icon">✦</div>
           <h2>ลงทะเบียนสำเร็จแล้ว!</h2>
@@ -799,6 +799,7 @@ function goStep(n) {
   currentStep = n;
   document.getElementById('step' + currentStep).classList.add('active');
   document.getElementById('sd' + currentStep).classList.add('active');
+  document.getElementById('register').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function togglePartner() {
