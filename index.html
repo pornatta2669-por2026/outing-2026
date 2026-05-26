@@ -857,7 +857,27 @@ function submitForm() {
   btn.textContent = '⏳ กำลังตรวจสอบ...';
   btn.disabled = true;
 
-  // ตรวจสอบนามสกุลซ้ำก่อน
+  function doSubmit() {
+    btn.textContent = '⏳ กำลังบันทึก...';
+    fetch(SHEET_URL, {
+      method  : 'POST',
+      mode    : 'no-cors',
+      headers : { 'Content-Type': 'application/json' },
+      body    : JSON.stringify(data)
+    }).then(function() {
+      var step = document.getElementById('step4');
+      step.querySelectorAll('.form-group, .btn-submit, .btn-back').forEach(function(el){ el.style.display='none'; });
+      document.getElementById('successMsg').style.display = 'block';
+      document.getElementById('sd4').classList.remove('active');
+      document.getElementById('sd4').classList.add('done');
+    }).catch(function() {
+      btn.textContent = '✦ ยืนยันการลงทะเบียน';
+      btn.disabled = false;
+      alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+    });
+  }
+
+  // ตรวจสอบนามสกุลซ้ำก่อน (ถ้า fail → ส่งข้อมูลต่อได้เลย)
   fetch(SHEET_URL + '?lname=' + encodeURIComponent(data.lname))
     .then(function(r) { return r.json(); })
     .then(function(res) {
@@ -865,29 +885,13 @@ function submitForm() {
         btn.textContent = '✦ ยืนยันการลงทะเบียน';
         btn.disabled = false;
         alert('⚠️ นามสกุล "' + data.lname + '" ลงทะเบียนไปแล้ว\nหากต้องการแก้ไข กรุณาติดต่อผู้ดูแลงาน');
-        return null;
+        return;
       }
-
-      btn.textContent = '⏳ กำลังบันทึก...';
-      return fetch(SHEET_URL, {
-        method  : 'POST',
-        mode    : 'no-cors',
-        headers : { 'Content-Type': 'application/json' },
-        body    : JSON.stringify(data)
-      });
-    })
-    .then(function(r) {
-      if (!r) return;
-      var step = document.getElementById('step4');
-      step.querySelectorAll('.form-group, .btn-submit, .btn-back').forEach(function(el){ el.style.display='none'; });
-      document.getElementById('successMsg').style.display = 'block';
-      document.getElementById('sd4').classList.remove('active');
-      document.getElementById('sd4').classList.add('done');
+      doSubmit();
     })
     .catch(function() {
-      btn.textContent = '✦ ยืนยันการลงทะเบียน';
-      btn.disabled = false;
-      alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+      // doGet fail → ส่งข้อมูลได้เลยไม่ block
+      doSubmit();
     });
 }
 </script>
