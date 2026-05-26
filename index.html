@@ -458,6 +458,30 @@ input:valid:not(:placeholder-shown){border-color:rgba(120,180,80,.6)}
 }
 .chip .dot{width:5px;height:5px;border-radius:50%;background:var(--gold)}
 
+/* ─── LIVE COUNTER ─── */
+.live-widget{
+  position:fixed;bottom:24px;right:24px;z-index:200;
+  background:rgba(26,18,0,.92);backdrop-filter:blur(16px);
+  border:1px solid rgba(184,146,42,.5);border-radius:20px;
+  padding:14px 20px;min-width:170px;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  animation:fadeUp .5s ease both;
+}
+.live-dot{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:#ff4444;margin-right:6px;
+  animation:pulse-live 1.5s ease-in-out infinite;
+}
+@keyframes pulse-live{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.live-label{font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:6px}
+.live-count{
+  font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;line-height:1;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.live-unit{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px;}
+.live-updated{font-size:10px;color:rgba(255,255,255,.3);margin-top:6px;}
+
 /* ─── FOOTER ─── */
 footer{
   background:var(--dark);padding:28px 56px;
@@ -710,6 +734,14 @@ footer{
   </div>
 </section>
 
+<!-- LIVE COUNTER WIDGET -->
+<div class="live-widget" id="liveWidget">
+  <div class="live-label"><span class="live-dot"></span>ลงทะเบียนแล้ว</div>
+  <div class="live-count" id="liveCount">—</div>
+  <div class="live-unit">คน</div>
+  <div class="live-updated" id="liveUpdated">กำลังโหลด...</div>
+</div>
+
 <footer>
   <div class="footer-logo">✦ Outing 2026 #7 & After Hours</div>
   <div class="footer-copy">© 2026 — สนุก ปลอดภัย และคืนที่ดีที่สุด 🥂</div>
@@ -765,6 +797,23 @@ function togglePartner() {
 }
 
 var SHEET_URL = 'https://script.google.com/macros/s/AKfycbxF2CqovmJv7GLFMQyBtLSRtonuR8bOhluXe4_kZzpYfv0HyTHut169Y3IPerGmdZN0/exec';
+
+function fetchCount() {
+  fetch(SHEET_URL + '?action=count')
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      document.getElementById('liveCount').textContent = res.count;
+      var now = new Date();
+      document.getElementById('liveUpdated').textContent =
+        'อัปเดต ' + now.getHours().toString().padStart(2,'0') + ':' +
+        now.getMinutes().toString().padStart(2,'0') + ':' +
+        now.getSeconds().toString().padStart(2,'0');
+    })
+    .catch(function(){ document.getElementById('liveUpdated').textContent = 'ไม่สามารถโหลดได้'; });
+}
+
+fetchCount();
+setInterval(fetchCount, 30000);
 
 function submitForm() {
   var hval = document.querySelector('input[name="hotel"]:checked');
