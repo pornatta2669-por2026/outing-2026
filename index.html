@@ -813,7 +813,7 @@ function togglePartner() {
   }
 }
 
-var SHEET_URL = 'https://script.google.com/macros/s/AKfycbxTmKlKLj1kGaKKNlVT_ouhE5Jc8rVVZoPox-o-cYpy7gbpDJFr56whGqIvHHDCMikn/exec';
+var SHEET_URL = 'https://script.google.com/macros/s/AKfycbyY9Bo10rTHx_OAHhl4kExy-_lo5yLBrzuJqODqPY91hvUky-cbaQnjQBDFcqSJ0YVK/exec';
 
 function fetchCount() {
   fetch(SHEET_URL + '?action=count')
@@ -838,19 +838,14 @@ function submitForm() {
 
   var pval  = document.querySelector('input[name="partner"]:checked');
   var aval  = document.querySelector('input[name="activity"]:checked');
-  var pName = '';
-  if (pval && pval.value === 'yes') {
-    pName = (document.getElementById('pfname').value.trim() + ' ' +
-             document.getElementById('plname').value.trim()).trim();
-  }
-
   var data = {
-    fname       : document.getElementById('fname').value.trim(),
-    lname       : document.getElementById('lname').value.trim(),
-    partner     : pval ? (pval.value === 'yes' ? 'พามาด้วย' : 'ไปคนเดียว') : '-',
-    partnerName : pName,
-    activity    : aval ? (aval.value === 'yes' ? 'เข้าร่วม' : 'ไม่เข้าร่วม') : '-',
-    hotel       : hval.value === 'yes' ? 'โรงแรม' : 'บ้าน'
+    fname        : document.getElementById('fname').value.trim(),
+    lname        : document.getElementById('lname').value.trim(),
+    partner      : pval ? (pval.value === 'yes' ? 'พามาด้วย' : 'ไปคนเดียว') : '-',
+    partnerFname : (pval && pval.value === 'yes') ? document.getElementById('pfname').value.trim() : '-',
+    partnerLname : (pval && pval.value === 'yes') ? document.getElementById('plname').value.trim() : '-',
+    activity     : aval ? (aval.value === 'yes' ? 'เข้าร่วม' : 'ไม่เข้าร่วม') : '-',
+    hotel        : hval.value === 'yes' ? 'โรงแรม' : 'บ้าน'
   };
 
   var btn = document.querySelector('.btn-submit');
