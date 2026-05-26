@@ -668,6 +668,8 @@ footer{
       <div class="step-dot" id="sd2">2</div>
       <div class="step-line" id="sl2"></div>
       <div class="step-dot" id="sd3">3</div>
+      <div class="step-line" id="sl3"></div>
+      <div class="step-dot" id="sd4">4</div>
     </div>
 
     <div class="card">
@@ -707,8 +709,21 @@ footer{
         <button class="btn-back" onclick="goStep(1)">← ย้อนกลับ</button>
       </div>
 
-      <!-- STEP 3: โรงแรม -->
+      <!-- STEP 3: กิจกรรมกลางวัน -->
       <div class="step" id="step3">
+        <div class="form-group">
+          <label class="field-label">สมาชิกอยากเข้าร่วมเล่นกิจกรรมกลางวันหรือไม่ <span style="color:#c44">*</span></label>
+          <div class="toggle-group">
+            <div class="tog"><input type="radio" name="activity" id="aYes" value="yes"/><label for="aYes"><span class="t-icon">🎯</span>เข้าร่วมพร้อมลุยยยย!</label></div>
+            <div class="tog"><input type="radio" name="activity" id="aNo" value="no"/><label for="aNo"><span class="t-icon">🌙</span>ไม่เข้าร่วมรอเจอคืนนี้จ้า</label></div>
+          </div>
+        </div>
+        <button class="btn-next" onclick="goStep(4)">ถัดไป →</button>
+        <button class="btn-back" onclick="goStep(2)">← ย้อนกลับ</button>
+      </div>
+
+      <!-- STEP 4: โรงแรม -->
+      <div class="step" id="step4">
         <div class="form-group">
           <label class="field-label">ท่านสะดวกเข้าพักที่ไหน <span style="color:#c44">*</span></label>
           <div class="toggle-group">
@@ -717,7 +732,7 @@ footer{
           </div>
         </div>
         <button class="btn-submit" onclick="submitForm()">✦ ยืนยันการลงทะเบียน</button>
-        <button class="btn-back" onclick="goStep(2)">← ย้อนกลับ</button>
+        <button class="btn-back" onclick="goStep(3)">← ย้อนกลับ</button>
         <div class="success" id="successMsg">
           <div class="success-icon">✦</div>
           <h2>ลงทะเบียนสำเร็จแล้ว!</h2>
@@ -751,7 +766,6 @@ footer{
 var currentStep = 1;
 
 function goStep(n) {
-  // Validate before moving forward
   if (n > currentStep) {
     if (currentStep === 1) {
       var fn = document.getElementById('fname').value.trim();
@@ -767,15 +781,18 @@ function goStep(n) {
         if (!pf || !pl) { alert('กรุณากรอกชื่อและนามสกุลของแฟน'); return; }
       }
     }
+    if (currentStep === 3) {
+      var aval = document.querySelector('input[name="activity"]:checked');
+      if (!aval) { alert('กรุณาเลือกว่าจะเข้าร่วมกิจกรรมกลางวันหรือไม่'); return; }
+    }
   }
 
   document.getElementById('step' + currentStep).classList.remove('active');
   document.getElementById('sd' + currentStep).classList.remove('active');
   if (n > currentStep) document.getElementById('sd' + currentStep).classList.add('done');
-  if (n < currentStep) document.getElementById('sd' + (currentStep)).classList.remove('done');
+  if (n < currentStep) document.getElementById('sd' + currentStep).classList.remove('done');
 
-  // Update lines
-  for (var i = 1; i <= 2; i++) {
+  for (var i = 1; i <= 3; i++) {
     document.getElementById('sl' + i).classList.toggle('done', i < n);
   }
 
@@ -817,10 +834,11 @@ setInterval(fetchCount, 30000);
 
 function submitForm() {
   var hval = document.querySelector('input[name="hotel"]:checked');
-  if (!hval) { alert('กรุณาเลือกว่าต้องการนอนโรงแรมหรือกลับบ้าน'); return; }
+  if (!hval) { alert('กรุณาเลือกว่าต้องการเข้าพักที่ไหน'); return; }
 
-  var pval    = document.querySelector('input[name="partner"]:checked');
-  var pName   = '';
+  var pval  = document.querySelector('input[name="partner"]:checked');
+  var aval  = document.querySelector('input[name="activity"]:checked');
+  var pName = '';
   if (pval && pval.value === 'yes') {
     pName = (document.getElementById('pfname').value.trim() + ' ' +
              document.getElementById('plname').value.trim()).trim();
@@ -831,7 +849,8 @@ function submitForm() {
     lname       : document.getElementById('lname').value.trim(),
     partner     : pval ? (pval.value === 'yes' ? 'พามาด้วย' : 'ไปคนเดียว') : '-',
     partnerName : pName,
-    hotel       : hval.value === 'yes' ? 'นอนโรงแรม' : 'กลับบ้านเอง'
+    activity    : aval ? (aval.value === 'yes' ? 'เข้าร่วม' : 'ไม่เข้าร่วม') : '-',
+    hotel       : hval.value === 'yes' ? 'โรงแรม' : 'บ้าน'
   };
 
   var btn = document.querySelector('.btn-submit');
@@ -859,11 +878,11 @@ function submitForm() {
     })
     .then(function(r) {
       if (!r) return;
-      var step = document.getElementById('step3');
+      var step = document.getElementById('step4');
       step.querySelectorAll('.form-group, .btn-submit, .btn-back').forEach(function(el){ el.style.display='none'; });
       document.getElementById('successMsg').style.display = 'block';
-      document.getElementById('sd3').classList.remove('active');
-      document.getElementById('sd3').classList.add('done');
+      document.getElementById('sd4').classList.remove('active');
+      document.getElementById('sd4').classList.add('done');
     })
     .catch(function() {
       btn.textContent = '✦ ยืนยันการลงทะเบียน';
