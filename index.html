@@ -227,18 +227,11 @@ section{padding:96px 24px;position:relative}
 /* ─── PARTY ─── */
 #party{background:var(--white)}
 .party-banner{
-  background:linear-gradient(135deg,#1A1200,#2C1F00);
+  border-radius:24px;margin-bottom:40px;overflow:hidden;
   border:1px solid rgba(184,146,42,.4);
-  border-radius:24px;padding:56px 48px;text-align:center;
-  position:relative;overflow:hidden;margin-bottom:40px;
+  box-shadow:0 8px 48px rgba(0,0,0,.45);
 }
-.party-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(212,175,90,.2),transparent 60%)}
-.party-banner .big-emoji{font-size:56px;display:block;margin-bottom:16px;animation:float 2.5s ease-in-out infinite;position:relative}
-.party-banner h2{
-  font-family:'Cormorant Garamond',serif;font-size:clamp(26px,5vw,50px);
-  font-weight:700;color:var(--white);margin-bottom:10px;position:relative;
-}
-.party-banner p{font-size:16px;color:rgba(255,255,255,.6);position:relative}
+.party-banner img{width:100%;display:block;}
 
 .party-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .party-card{
@@ -502,7 +495,7 @@ footer{
   .hero-stats{flex-wrap:wrap}
   .stat{max-width:50%;border-bottom:1px solid var(--border)}
   footer{padding:20px;flex-direction:column;text-align:center}
-  .party-banner{padding:36px 22px}
+  .party-banner{border-radius:16px}
 }
 @media(max-width:480px){
   .card{padding:26px 18px}
@@ -589,17 +582,7 @@ footer{
 <section id="party">
   <div class="sec-inner">
     <div class="party-banner">
-      <span class="big-emoji">🎶</span>
-      <h2><span class="gold-text">After Hours</span> Night</h2>
-      <p>พบกับปาร์ตี้สุดเอ็กซ์คลูซีฟที่คุณไม่อยากพลาด</p>
-      <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:20px;position:relative;">
-        <div style="border:1px solid rgba(212,175,90,.4);border-radius:100px;padding:8px 22px;font-size:13px;font-weight:700;letter-spacing:1.5px;color:#D4AF5A;">
-          🎭 Theme : Alter Ego Night
-        </div>
-        <div style="border:1px solid rgba(212,175,90,.4);border-radius:100px;padding:8px 22px;font-size:13px;font-weight:700;letter-spacing:1px;color:#D4AF5A;">
-          🎨 Mood&Tone : แดง · ดำ · ขาว · ครีม
-        </div>
-      </div>
+      <img src="optimized/afterhours-poster.jpg" alt="After Hours Night — Outing 2026 #7"/>
     </div>
     <div class="party-cards">
       <div class="party-card"><span class="emoji">🍾</span><h4>Open Bar ตลอดคืน</h4><p>เครื่องดื่ม ไม่อั้นตลอดทั้งงาน</p></div>
